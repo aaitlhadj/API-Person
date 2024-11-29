@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const Person = require("../models/Person");
-const { filterByAge, filterByLastName, filterByFirstName, filteredOrder } = require("../helpers/sortList");
+const { filteredOrder } = require("../helpers/sortList");
 
 exports.uploadFile = async (req, res, next) => {
     try {
