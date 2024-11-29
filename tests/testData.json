@@ -1,0 +1,5 @@
+[
+    { "LastName": "Doe", "FirstName": "John" },
+    { "LastName": "Smith", "FirstName": "Alice" },
+    { "LastName": null, "FirstName": "Bob" }
+]
