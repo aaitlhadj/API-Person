@@ -132,3 +132,4 @@ dist
 output/
 uploads/
 .DS_Store
+.vscode/

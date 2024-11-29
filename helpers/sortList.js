@@ -18,27 +18,40 @@ const filterByFirstName = (persons) => {
     });
 };
 
-exports.filteredOrder = async (persons, order, filePath) => {
-    let filteredData = persons;
+// exports.filteredOrder = async (persons, order, filePath) => {
+//     let filteredData = persons;
 
-    for (let choice of order) {
-        switch (choice) {
-            case "a":
-                filterByAge(filteredData);
-                break;
-            case "b":
-                filterByLastName(filteredData);
-                break;
-            case "c":
-                filterByFirstName(filteredData);
-                break;
-            default:
-                console.log(`Sous-traitement inconnu : ${choice}`);
+//     for (let choice of order) {
+//         switch (choice) {
+//             case "age":
+//                 filterByAge(filteredData);
+//                 break;
+//             case "lastName":
+//                 filterByLastName(filteredData);
+//                 break;
+//             case "firstName":
+//                 filterByFirstName(filteredData);
+//                 break;
+//             default:
+//                 console.log(`Sous-traitement inconnu : ${choice}`);
+//         }
+//     }
+
+//     const dataFiltered = JSON.stringify(persons, null, 2);
+//     fs.writeFileSync(filePath, dataFiltered, "utf8");
+
+//     return filteredData;
+// };
+
+exports.filteredOrder = (order) => {
+    return (p1, p2) => {
+        for (const critere of order) {
+            if (!(critere in p1) || !(critere in p2)) continue;
+
+            if (p1[critere] !== p2[critere]) {
+                return p1[critere] > p2[critere] ? 1 : -1;
+            }
         }
-    }
-
-    const dataFiltered = JSON.stringify(persons, null, 2);
-    fs.writeFileSync(filePath, dataFiltered, "utf8");
-
-    return filteredData;
-};
+        return 0;
+    };
+}

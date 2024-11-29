@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const Person = require("../models/Person");
-const { filterByAge, filterByLastName, filterByFirstName, filteredOrder } = require("../helpers/sortList");
+const { filteredOrder } = require("../helpers/sortList");
 
 exports.uploadFile = async (req, res, next) => {
     try {
@@ -87,7 +87,7 @@ exports.savePerson = async (req, res, next) => {
         console.log("Liste des personnes invalides", invalidPerson);
 
         //Création du fichier trié
-        const newFilePath = req.body.path || "../output/persons.txt";
+        const newFilePath = req.body.path || "./output/persons.txt";
 
         // Tri en fonction de l'age puis du lastName
         validPerson.sort((p1, p2) => {
@@ -127,8 +127,12 @@ exports.sortList = async (req, res, next) => {
         const dataDb = await Person.find();
         const newFile = path.join(__dirname, "../output/sortedPersons.txt");
         const { order } = req.query;
+        const userOrder = order ? order.split(',') : ["Age"];
+        const sortFunction = filteredOrder(userOrder);
+        const sortedPersons = dataDb.sort(sortFunction);
+        const dataFiltered = JSON.stringify(sortedPersons, null, 2);
 
-        await filteredOrder(dataDb, order, newFile);
+        fs.writeFileSync(newFile, dataFiltered, "utf8");
         return res.status(200).json({ file: newFile });
     } catch (error) {
         console.log(error);

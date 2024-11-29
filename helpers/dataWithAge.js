@@ -1,6 +1,7 @@
 [
     { "LastName": "Doe", "FirstName": "John", "Age": 20 },
     { "LastName": "Smith", "FirstName": "Jane", "Age": 50 },
+    { "LastName": "Smith", "FirstName": "Eric", "Age": 42 },
     { "LastName": "Brown", "FirstName": "Emily", "Age": 45 },
     { "LastName": "Leanne", "FirstName": "Graham", "Age": 39 },
     { "LastName": "Howell", "FirstName": "Ervin", "Age": 25 },
