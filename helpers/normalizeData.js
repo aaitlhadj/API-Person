@@ -4,16 +4,12 @@ const path = require('path');
 const normalizeKeys = (data) => {
     const keyMapping = {
         firstname: "FirstName",
-        Firstname: "FirstName",
-        firstName: "FirstName",
         first_name: "FirstName",
         lastname: "LastName",
-        Lastname: "LastName",
-        lastName: "LastName",
         last_name: "LastName",
         age: "Age",
     };
-    
+
     return data.map((item) => {
         const normalizedItem = {};
         for (const key in item) {
