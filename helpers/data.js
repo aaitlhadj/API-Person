@@ -1,8 +1,8 @@
 [
-    { "LastName": "Doe", "FirstName": "John" },
-    { "LastName": "Smith", "FirstName": "Jane" },
-    { "LastName": "Brown", "FirstName": "Emily" },
-    { "LastName": "Leanne", "FirstName": "Graham" },
+    { "lastname": "Doe", "FirstName": "John" },
+    { "lastname": "Smith", "FirstName": "Jane" },
+    { "LastName": "Brown", "first_name": "Emily" },
+    { "LastName": "Leanne", "firstname": "Graham" },
     { "LastName": "Howell", "FirstName": "Ervin" },
     { "LastName": "Bauch", "FirstName": "Clementine" },
     { "LastName": "Dietrich", "FirstName": "Chelsey" },

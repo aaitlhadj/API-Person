@@ -2,6 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const Person = require("../models/Person");
 const { filteredOrder } = require("../helpers/sortList");
+const { normalizeData, addLogs } = require("../helpers/normalizeData");
+
 
 exports.uploadFile = async (req, res, next) => {
     try {
@@ -10,21 +12,15 @@ exports.uploadFile = async (req, res, next) => {
         const invalidPerson = [];
 
         // Gérer les données du fichier de la requête
-        const data = fs.readFileSync(filePath, "utf8");
-        const persons = await JSON.parse(data);
-        console.log(persons);
+        const normalizedData = normalizeData(filePath);
 
         //Créer les listes valide et non valide des personnes
-        persons.forEach((person) => {
+        normalizedData.forEach((person) => {
             if (person.FirstName && person.LastName) {
                 validPerson.push(person);
             } else {
                 invalidPerson.push(person);
-                const logPath = path.join(__dirname, "../logs/errors.log");
-                const logMsg = `${new Date().toISOString()} - Erreur pour la personne : ${JSON.stringify(
-                    person
-                )}\n`;
-                fs.appendFileSync(logPath, logMsg);
+                addLogs(person);
             }
         });
         console.log("Liste des personnes invalides", invalidPerson);
@@ -57,21 +53,15 @@ exports.savePerson = async (req, res, next) => {
         const invalidPerson = [];
 
         // Gérer les données du fichier de la requête
-        const data = fs.readFileSync(filePath, "utf8");
-        const persons = await JSON.parse(data);
-        console.log(persons);
+        const normalizedData = normalizeData(filePath);
 
         // Boucle sur la liste
-        for (const person of persons) {
+        for (const person of normalizedData) {
             if (person.Age < 40) {
                 invalidPerson.push(person);
 
                 // On ajoute une ligne dans le fichier de log
-                const logPath = path.join(__dirname, "../logs/errors.log");
-                const logMsg = `${new Date().toISOString()} - Erreur pour la personne : ${JSON.stringify(
-                    person
-                )}\n`;
-                fs.appendFileSync(logPath, logMsg);
+                addLogs(person);
             } else {
                 validPerson.push(person);
                 const personDB = new Person({
@@ -127,8 +117,12 @@ exports.sortList = async (req, res, next) => {
         const dataDb = await Person.find();
         const newFile = path.join(__dirname, "../output/sortedPersons.txt");
         const { order } = req.query;
+        const userOrder = order ? order.split(',') : ["Age"];
+        const sortFunction = filteredOrder(userOrder);
+        const sortedPersons = dataDb.sort(sortFunction);
+        const dataFiltered = JSON.stringify(sortedPersons, null, 2);
 
-        await filteredOrder(dataDb, order, newFile);
+        fs.writeFileSync(newFile, dataFiltered, "utf8");
         return res.status(200).json({ file: newFile });
     } catch (error) {
         console.log(error);
